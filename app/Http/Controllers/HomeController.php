@@ -4,6 +4,13 @@ namespace App\Http\Controllers;
 
 class HomeController extends Controller
 {
+    public function index()
+    {
+        $viewData = [];
+        $viewData["title"] = "Home Page - Online Store";
+        return view('home.index')->with("viewData", $viewData);
+    }
+
     public function about()
     {
         $data1 = "About us - Online Store";
