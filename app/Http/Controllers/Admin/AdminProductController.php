@@ -20,13 +20,7 @@ class AdminProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'price' => 'required|numeric|gt:0',
-            'image' => 'image',
-        ]);
-
+        Product::validate($request);
         $newProduct = new Product();
         $newProduct->setName($request->input('name'));
         $newProduct->setDescription($request->input('description'));
@@ -35,7 +29,8 @@ class AdminProductController extends Controller
         $newProduct->save();
 
         if ($request->hasFile('image')) {
-            $imageName = $newProduct->getId() . "." . $request->file('image')->extension();
+            $imageName = $newProduct
+                    ->getId() . "." . $request->file('image')->extension();
             Storage::disk('public')->put(
                 $imageName,
                 file_get_contents($request->file('image')->getRealPath())
@@ -65,20 +60,15 @@ class AdminProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'price' => 'required|numeric|gt:0',
-            'image' => 'image',
-        ]);
-
+        Product::validate($request);
         $product = Product::query()->findOrFail($id);
         $product->setName($request->input('name'));
         $product->setDescription($request->input('description'));
         $product->setPrice($request->input('price'));
 
         if ($request->hasFile('image')) {
-            $imageName = $product->getId() . "." . $request->file('image')->extension();
+            $imageName = $product
+                    ->getId() . "." . $request->file('image')->extension();
             Storage::disk('public')->put(
                 $imageName,
                 file_get_contents($request->file('image')->getRealPath())
