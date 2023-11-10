@@ -12,7 +12,10 @@ class MyAccountController extends Controller
         $viewData = [];
         $viewData['title'] = "My Orders - Online Store";
         $viewData['subtitle'] = "My Orders";
-        $viewData['orders'] = Order::query()
+        // $viewData['orders'] = Order::query()
+        //    ->where('user_id', Auth::user()->getId())->get();
+        // Using eager loading
+        $viewData['orders'] = Order::query()->with(['items.product'])
             ->where('user_id', Auth::user()->getId())->get();
 
         return view('myaccount.orders')->with('viewData', $viewData);
